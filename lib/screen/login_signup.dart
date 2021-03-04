@@ -1,7 +1,7 @@
 import 'package:chigago_login/config/palette.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-
 
 class LoginSignupScreen extends StatefulWidget {
   @override
@@ -15,159 +15,122 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Palette.backgroundColor,
-      body: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            right: 0,
-            left: 0,
-            child: Container(
-              height: 300,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("images/background.jpg"),
-                      fit: BoxFit.fill)),
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset:true,
+        backgroundColor: Palette.backgroundColor,
+        body: Stack(
+          children: [
+            Positioned(
+              top: 0,
+              right: 0,
+              left: 0,
               child: Container(
+                height: 300,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    image: DecorationImage(
+                        image: AssetImage("images/background.jpg"),
+                        fit: BoxFit.fill)),
 
-                padding: EdgeInsets.only(top: 90, left: 20),
-                color: Color(0xFF3b5999).withOpacity(.85),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-//                    RichText(
-//                      text: TextSpan(
-//                          text: "Welcome to",
-//                          style: TextStyle(
-//                            fontSize: 25,
-//                            letterSpacing: 2,
-//                            color: Colors.yellow[700],
-//                          ),
-//                          children: [
-//                            TextSpan(
-//                              text: isSignupScreen ? " Rizona," : " Back,",
-//                              style: TextStyle(
-//                                fontSize: 25,
-//                                fontWeight: FontWeight.bold,
-//                                color: Colors.yellow[700],
-//                              ),
-//                            )
-//                          ]),
-//                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      isSignupScreen
-                          ? "Signup to Continue"
-                          : "Signin to Continue",
-                      style: TextStyle(
-                        letterSpacing: 1,
-                        color: Colors.white,
-                      ),
-                    )
-                  ],
-                ),
               ),
             ),
-          ),
-          // Trick to add the shadow for the submit button
-          buildBottomHalfContainer(true),
-          //Main Contianer for Login and Signup
-          AnimatedPositioned(
-            duration: Duration(milliseconds: 400),
-            curve: Curves.bounceInOut,
-            top: isSignupScreen ? 200 : 230,
-            child: AnimatedContainer(
-              duration: Duration(milliseconds: 700),
+            // Trick to add the shadow for the submit button
+
+            //Main Contianer for Login and Signup
+            AnimatedPositioned(
+              duration: Duration(milliseconds: 400),
               curve: Curves.bounceInOut,
-              height: isSignupScreen ? 380 : 250,
-              padding: EdgeInsets.all(20),
-              width: MediaQuery.of(context).size.width - 40,
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        blurRadius: 15,
-                        spreadRadius: 5),
-                  ]),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isSignupScreen = false;
-                            });
-                          },
-                          child: Column(
-                            children: [
-                              Text(
-                                "Войти",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: !isSignupScreen
-                                        ? Palette.activeColor
-                                        : Palette.textColor1),
-                              ),
-                              if (!isSignupScreen)
-                                Container(
-                                  margin: EdgeInsets.only(top: 3),
-                                  height: 2,
-                                  width: 55,
-                                  color: Colors.orange,
-                                )
-                            ],
+              top: isSignupScreen ? 200 : 230,
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 700),
+                curve: Curves.bounceInOut,
+                height: isSignupScreen ? 380 : 300,
+                padding: EdgeInsets.all(20),
+                width: MediaQuery.of(context).size.width - 40,
+                margin: EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 15,
+                          spreadRadius: 5),
+                    ]),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isSignupScreen = false;
+                              });
+                            },
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Войти",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: !isSignupScreen
+                                          ? Palette.activeColor
+                                          : Palette.textColor1),
+                                ),
+                                if (!isSignupScreen)
+                                  Container(
+                                    margin: EdgeInsets.only(top: 3),
+                                    height: 2,
+                                    width: 55,
+                                    color: Colors.orange,
+                                  )
+                              ],
+                            ),
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isSignupScreen = true;
-                            });
-                          },
-                          child: Column(
-                            children: [
-                              Text(
-                                "Зарегистрироваться",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: isSignupScreen
-                                        ? Palette.activeColor
-                                        : Palette.textColor1),
-                              ),
-                              if (isSignupScreen)
-                                Container(
-                                  margin: EdgeInsets.only(top: 3),
-                                  height: 2,
-                                  width: 55,
-                                  color: Colors.orange,
-                                )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    if (isSignupScreen) buildSignupSection(),
-                    if (!isSignupScreen) buildSigninSection()
-                  ],
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isSignupScreen = true;
+                              });
+                            },
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Зарегистрироваться",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: isSignupScreen
+                                          ? Palette.activeColor
+                                          : Palette.textColor1),
+                                ),
+                                if (isSignupScreen)
+                                  Container(
+                                    margin: EdgeInsets.only(top: 3),
+                                    height: 2,
+                                    width: 55,
+                                    color: Colors.orange,
+                                  )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      if (isSignupScreen) buildSignupSection(),
+                      if (!isSignupScreen) buildSigninSection()
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          // Trick to add the submit button
-          buildBottomHalfContainer(false),
-
-        ],
+            // Trick to add the submit button
+          ],
+        ),
       ),
     );
   }
@@ -175,22 +138,25 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   Container buildSigninSection() {
     return Container(
       margin: EdgeInsets.only(top: 20),
-      child: Column(
-        children: [
-          buildTextField(Icons.mail_outline, "info@demouri.com", false, true),
-          buildTextField(
-              MaterialCommunityIcons.lock_outline, "**********", true, false),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TextButton(
-                onPressed: () {},
-                child: Text("Забыли пароль?",
-                    style: TextStyle(fontSize: 12, color: Palette.textColor1)),
-              )
-            ],
-          )
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            buildTextField(Icons.mail_outline, "Адрес электронной почты", false, true),
+            buildTextField(
+                MaterialCommunityIcons.lock_outline, "Пароль", true, false),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () {},
+                  child: Text("Забыли пароль?",
+                      style: TextStyle(fontSize: 18, color: Colors.red)),
+                )
+              ],
+            ),
+            buildTextButton("Войти", Colors.red)
+          ],
+        ),
       ),
     );
   }
@@ -199,9 +165,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          buildTextField(MaterialCommunityIcons.account_outline, "Имя",
-              false, false),
+          buildTextField(
+              MaterialCommunityIcons.account_outline, "Имя", false, false),
           buildTextField(
               MaterialCommunityIcons.email_outline, "Почта", false, true),
           buildTextField(
@@ -218,91 +185,39 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     TextSpan(
                       //recognizer: ,
                       text: "Вход",
-                      style: TextStyle(color: Colors.red),
+                      style: TextStyle(
+                        color: Colors.red,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
                   ]),
             ),
           ),
+          SizedBox(height: 7),
+          buildTextButton("Зарегистрироваться", Colors.red)
         ],
       ),
     );
   }
 
-  TextButton buildTextButton(
-      IconData icon, String title, Color backgroundColor) {
+  TextButton buildTextButton(String title, Color backgroundColor) {
     return TextButton(
       onPressed: () {},
+
       style: TextButton.styleFrom(
-          side: BorderSide(width: 1, color: Colors.grey),
-          minimumSize: Size(145, 40),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          primary: Colors.white,
-          backgroundColor: backgroundColor),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          Text(
-            title,
-          )
-        ],
+
+        backgroundColor: backgroundColor,
+        side: BorderSide(width: 1, color: Colors.white),
+        minimumSize: Size(145, 40),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
+          // side: BorderSide(color: Colors.red)
+        ),
       ),
+      child: Text(title, textAlign: TextAlign.center),
     );
   }
 
-  Widget buildBottomHalfContainer(bool showShadow) {
-    return AnimatedPositioned(
-      duration: Duration(milliseconds: 700),
-      curve: Curves.bounceInOut,
-      top: isSignupScreen ? 535 : 430,
-      right: 0,
-      left: 0,
-      child: Center(
-        child: Container(
-          height: 90,
-          width: 90,
-          padding: EdgeInsets.all(15),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(50),
-              boxShadow: [
-                if (showShadow)
-                  BoxShadow(
-                    color: Colors.black.withOpacity(.3),
-                    spreadRadius: 1.5,
-                    blurRadius: 10,
-                  )
-              ]),
-          child: !showShadow
-              ? Container(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [Colors.orange[200], Colors.red[400]],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight),
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(.3),
-                            spreadRadius: 1,
-                            blurRadius: 2,
-                            offset: Offset(0, 1))
-                      ]),
-                  child: Icon(
-                    Icons.arrow_forward,
-                    color: Colors.white,
-                  ),
-                )
-              : Center(),
-        ),
-      ),
-    );
-  }
 
   Widget buildTextField(
       IconData icon, String hintText, bool isPassword, bool isEmail) {
@@ -316,13 +231,13 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
             icon,
             color: Palette.iconColor,
           ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Palette.textColor1),
-            borderRadius: BorderRadius.all(Radius.circular(35.0)),
-          ),
+//          enabledBorder: OutlineInputBorder(
+//            borderSide: BorderSide(color: Palette.textColor1),
+//            borderRadius: BorderRadius.all(Radius.circular(35.0)),
+//          ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Palette.textColor1),
-            borderRadius: BorderRadius.all(Radius.circular(35.0)),
+//            borderRadius: BorderRadius.all(Radius.circular(35.0)),
           ),
           contentPadding: EdgeInsets.all(10),
           hintText: hintText,
