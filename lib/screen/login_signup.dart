@@ -12,6 +12,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
     return SafeArea(
       child: DefaultTabController(
         length: 2,
@@ -28,14 +29,14 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   Container(
                     height: size.height * 0.4,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Palette.COLOR_WHITE,
                       borderRadius: BorderRadius.all(Radius.circular(25)),
                     ),
                     child: Center(
                       child: Container(
                           height: size.height * 0.2,
                           decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Palette.COLOR_WHITE,
                               image: DecorationImage(
                                   image: AssetImage("images/logo.png"),
                                   fit: BoxFit.contain))),
@@ -47,7 +48,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       elevation: 0,
                       backgroundColor: Colors.transparent,
                       bottom: TabBar(
-                        labelColor: Colors.deepPurpleAccent,
+                        labelColor: Palette.facebookColor,
                         tabs: [
                           Tab(
                             text: "Войти",
@@ -83,6 +84,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   }
 
   Container buildSigninSection() {
+    final ThemeData themeData = Theme.of(context);
     return Container(
       margin: EdgeInsets.only(top: 20),
       child: SingleChildScrollView(
@@ -99,11 +101,11 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                 TextButton(
                   onPressed: () {},
                   child: Text("Забыли пароль?",
-                      style: TextStyle(fontSize: 18, color: Colors.red)),
+                      style: themeData.textTheme.bodyText1),
                 )
               ],
             ),
-            buildTextButton("Войти", Colors.red)
+            buildTextButton("Войти", Palette.googleColor)
           ],
         ),
       ),
@@ -136,7 +138,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                         //recognizer: ,
                         text: "Вход",
                         style: TextStyle(
-                          color: Colors.red,
+                          color: Palette.googleColor,
                           decoration: TextDecoration.underline,
                         ),
                       ),
@@ -144,7 +146,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               ),
             ),
             SizedBox(height: 7),
-            buildTextButton("Зарегистрироваться", Colors.red)
+            buildTextButton("Зарегистрироваться", Palette.googleColor)
           ],
         ),
       ),
@@ -152,23 +154,29 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   }
 
   TextButton buildTextButton(String title, Color backgroundColor) {
+
     return TextButton(
       onPressed: () {},
       style: TextButton.styleFrom(
         backgroundColor: backgroundColor,
-        side: BorderSide(width: 1, color: Colors.white),
+        side: BorderSide(width: 1, color: Palette.googleColor),
         minimumSize: Size(250, 40),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
           // side: BorderSide(color: Colors.red)
         ),
       ),
-      child: Text(title, textAlign: TextAlign.center,style: TextStyle(color: Colors.white) ,),
+      child: Text(
+        title,
+        textAlign: TextAlign.center,
+        style: TextStyle(color: Palette.COLOR_WHITE),
+      ),
     );
   }
 
   Widget buildTextField(
       IconData icon, String hintText, bool isPassword, bool isEmail) {
+    final ThemeData themeData = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: TextField(
@@ -189,7 +197,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           ),
           contentPadding: EdgeInsets.all(10),
           hintText: hintText,
-          hintStyle: TextStyle(fontSize: 14, color: Palette.textColor1),
+          hintStyle: themeData.textTheme.subtitle1,
         ),
       ),
     );
