@@ -9,10 +9,6 @@ class LoginSignupScreen extends StatefulWidget {
 }
 
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
-  bool isSignupScreen = true;
-  bool isMale = true;
-  bool isRememberMe = false;
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -167,7 +163,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           // side: BorderSide(color: Colors.red)
         ),
       ),
-      child: Text(title, textAlign: TextAlign.center),
+      child: Text(title, textAlign: TextAlign.center,style: TextStyle(color: Colors.white) ,),
     );
   }
 
