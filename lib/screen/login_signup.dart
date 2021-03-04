@@ -15,121 +15,72 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomPadding: false,
-        resizeToAvoidBottomInset:true,
-        backgroundColor: Palette.backgroundColor,
-        body: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              right: 0,
-              left: 0,
-              child: Container(
-                height: 300,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                    image: DecorationImage(
-                        image: AssetImage("images/background.jpg"),
-                        fit: BoxFit.fill)),
-
-              ),
-            ),
-            // Trick to add the shadow for the submit button
-
-            //Main Contianer for Login and Signup
-            AnimatedPositioned(
-              duration: Duration(milliseconds: 400),
-              curve: Curves.bounceInOut,
-              top: isSignupScreen ? 200 : 230,
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 700),
-                curve: Curves.bounceInOut,
-                height: isSignupScreen ? 380 : 300,
-                padding: EdgeInsets.all(20),
-                width: MediaQuery.of(context).size.width - 40,
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          blurRadius: 15,
-                          spreadRadius: 5),
-                    ]),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isSignupScreen = false;
-                              });
-                            },
-                            child: Column(
-                              children: [
-                                Text(
-                                  "Войти",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: !isSignupScreen
-                                          ? Palette.activeColor
-                                          : Palette.textColor1),
-                                ),
-                                if (!isSignupScreen)
-                                  Container(
-                                    margin: EdgeInsets.only(top: 3),
-                                    height: 2,
-                                    width: 55,
-                                    color: Colors.orange,
-                                  )
-                              ],
-                            ),
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          resizeToAvoidBottomPadding: false,
+          resizeToAvoidBottomInset: true,
+          backgroundColor: Palette.backgroundColor,
+          body: Column(
+            children: <Widget>[
+              // construct the profile details widget here
+              Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Container(
+                    height: size.height * 0.4,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(25)),
+                    ),
+                    child: Center(
+                      child: Container(
+                          height: size.height * 0.2,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              image: DecorationImage(
+                                  image: AssetImage("images/logo.png"),
+                                  fit: BoxFit.contain))),
+                    ),
+                  ), // the tab bar with two items
+                  SizedBox(
+                    height: size.height * 0.09,
+                    child: AppBar(
+                      elevation: 0,
+                      backgroundColor: Colors.transparent,
+                      bottom: TabBar(
+                        labelColor: Colors.deepPurpleAccent,
+                        tabs: [
+                          Tab(
+                            text: "Войти",
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isSignupScreen = true;
-                              });
-                            },
-                            child: Column(
-                              children: [
-                                Text(
-                                  "Зарегистрироваться",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: isSignupScreen
-                                          ? Palette.activeColor
-                                          : Palette.textColor1),
-                                ),
-                                if (isSignupScreen)
-                                  Container(
-                                    margin: EdgeInsets.only(top: 3),
-                                    height: 2,
-                                    width: 55,
-                                    color: Colors.orange,
-                                  )
-                              ],
-                            ),
-                          )
+                          Tab(
+                            text: "Зарегистрироваться",
+                          ),
                         ],
                       ),
-                      if (isSignupScreen) buildSignupSection(),
-                      if (!isSignupScreen) buildSigninSection()
-                    ],
+                    ),
                   ),
+                ],
+              ),
+
+              // create widgets for each tab bar here
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    // first tab bar view widget
+                    buildSigninSection(),
+
+                    // second tab bar viiew widget
+                    buildSignupSection(),
+                  ],
                 ),
               ),
-            ),
+            ],
             // Trick to add the submit button
-          ],
+          ),
         ),
       ),
     );
@@ -140,8 +91,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       margin: EdgeInsets.only(top: 20),
       child: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            buildTextField(Icons.mail_outline, "Адрес электронной почты", false, true),
+            buildTextField(
+                Icons.mail_outline, "Адрес электронной почты", false, true),
             buildTextField(
                 MaterialCommunityIcons.lock_outline, "Пароль", true, false),
             Row(
@@ -164,38 +117,40 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   Container buildSignupSection() {
     return Container(
       margin: EdgeInsets.only(top: 20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          buildTextField(
-              MaterialCommunityIcons.account_outline, "Имя", false, false),
-          buildTextField(
-              MaterialCommunityIcons.email_outline, "Почта", false, true),
-          buildTextField(
-              MaterialCommunityIcons.lock_outline, "Пароль", true, false),
-          Container(
-            width: 200,
-            margin: EdgeInsets.only(top: 20),
-            child: RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                  text: "Уже зарегистрированы? ",
-                  style: TextStyle(color: Palette.textColor2),
-                  children: [
-                    TextSpan(
-                      //recognizer: ,
-                      text: "Вход",
-                      style: TextStyle(
-                        color: Colors.red,
-                        decoration: TextDecoration.underline,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            buildTextField(
+                MaterialCommunityIcons.account_outline, "Имя", false, false),
+            buildTextField(
+                MaterialCommunityIcons.email_outline, "Почта", false, true),
+            buildTextField(
+                MaterialCommunityIcons.lock_outline, "Пароль", true, false),
+            Container(
+              width: 200,
+              margin: EdgeInsets.only(top: 20),
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                    text: "Уже зарегистрированы? ",
+                    style: TextStyle(color: Palette.textColor2),
+                    children: [
+                      TextSpan(
+                        //recognizer: ,
+                        text: "Вход",
+                        style: TextStyle(
+                          color: Colors.red,
+                          decoration: TextDecoration.underline,
+                        ),
                       ),
-                    ),
-                  ]),
+                    ]),
+              ),
             ),
-          ),
-          SizedBox(height: 7),
-          buildTextButton("Зарегистрироваться", Colors.red)
-        ],
+            SizedBox(height: 7),
+            buildTextButton("Зарегистрироваться", Colors.red)
+          ],
+        ),
       ),
     );
   }
@@ -203,12 +158,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   TextButton buildTextButton(String title, Color backgroundColor) {
     return TextButton(
       onPressed: () {},
-
       style: TextButton.styleFrom(
-
         backgroundColor: backgroundColor,
         side: BorderSide(width: 1, color: Colors.white),
-        minimumSize: Size(145, 40),
+        minimumSize: Size(250, 40),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
           // side: BorderSide(color: Colors.red)
@@ -217,7 +170,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       child: Text(title, textAlign: TextAlign.center),
     );
   }
-
 
   Widget buildTextField(
       IconData icon, String hintText, bool isPassword, bool isEmail) {
