@@ -17,7 +17,7 @@ class Palette {
      headline2: TextStyle(
          color:googleColor,  fontSize: 8),
      bodyText1: TextStyle(
-         color:textColor2, fontSize: 10, fontWeight: FontWeight.w500,height: 1),
+         color:textColor1, fontSize: 10, fontWeight: FontWeight.w300,height: 1),
      bodyText2: TextStyle(
          color:  COLOR_WHITE, fontSize: 12, fontWeight: FontWeight.w500,height: 1.5),
      subtitle1:

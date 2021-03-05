@@ -1,5 +1,8 @@
 import 'package:chigago_login/screen/login_signup.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'bloc_form/my_form_bloc.dart';
 
 
 void main() {
@@ -14,7 +17,9 @@ class LoginSignupUI extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Login Signup UI",
-      home: LoginSignupScreen(),
+      home:  BlocProvider(
+        create: (_) => MyFormBloc(),
+    child:LoginSignupScreen(),),
     );
   }
 }

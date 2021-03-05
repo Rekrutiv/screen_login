@@ -1,7 +1,11 @@
+import 'package:chigago_login/bloc_form/my_form_bloc.dart';
 import 'package:chigago_login/config/palette.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:formz/formz.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   @override
@@ -9,18 +13,61 @@ class LoginSignupScreen extends StatefulWidget {
 }
 
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _emailFocusNode.addListener(() {
+      if (!_emailFocusNode.hasFocus) {
+        context.read<MyFormBloc>().add(EmailUnfocused());
+        FocusScope.of(context).requestFocus(_passwordFocusNode);
+      }
+    });
+    _passwordFocusNode.addListener(() {
+      if (!_passwordFocusNode.hasFocus) {
+        context.read<MyFormBloc>().add(PasswordUnfocused());
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
     return SafeArea(
-      child: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          resizeToAvoidBottomPadding: false,
-          resizeToAvoidBottomInset: true,
-          backgroundColor: Palette.backgroundColor,
-          body: Column(
+        child: DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomInset: true,
+        backgroundColor: Palette.backgroundColor,
+        body: BlocListener<MyFormBloc, MyFormState>(
+          listener: (context, state) {
+            if (state.status.isSubmissionInProgress) {
+              Scaffold.of(context).hideCurrentSnackBar();
+              showDialog<void>(
+                context: context,
+                builder: (_) => SuccessDialog(),
+              );
+            }
+            if (state.status.isSubmissionInProgress) {
+              Scaffold.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  const SnackBar(content: Text('Submitting...')),
+                );
+            }
+          },
+          child: Column(
             children: <Widget>[
               // construct the profile details widget here
               Stack(
@@ -80,7 +127,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Container buildSigninSection() {
@@ -92,7 +139,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             buildTextField(
-                Icons.mail_outline, "Адрес электронной почты", false, true),
+                MaterialCommunityIcons.email_outline, "Почта", false, true),
             buildTextField(
                 MaterialCommunityIcons.lock_outline, "Пароль", true, false),
             Row(
@@ -121,10 +168,8 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           children: [
             buildTextField(
                 MaterialCommunityIcons.account_outline, "Имя", false, false),
-            buildTextField(
-                MaterialCommunityIcons.email_outline, "Почта", false, true),
-            buildTextField(
-                MaterialCommunityIcons.lock_outline, "Пароль", true, false),
+            EmailInput(focusNode: _emailFocusNode),
+            PasswordInput(focusNode: _passwordFocusNode),
             Container(
               width: 200,
               margin: EdgeInsets.only(top: 20),
@@ -154,7 +199,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   }
 
   TextButton buildTextButton(String title, Color backgroundColor) {
-
     return TextButton(
       onPressed: () {},
       style: TextButton.styleFrom(
@@ -198,6 +242,113 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
           contentPadding: EdgeInsets.all(10),
           hintText: hintText,
           hintStyle: themeData.textTheme.subtitle1,
+        ),
+      ),
+    );
+  }
+}
+
+class EmailInput extends StatelessWidget {
+  const EmailInput({Key key, this.focusNode}) : super(key: key);
+
+  final FocusNode focusNode;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<MyFormBloc, MyFormState>(
+      builder: (context, state) {
+        return TextFormField(
+          initialValue: state.email.value,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+            icon: const Icon(Icons.email),
+            labelText: 'Email',
+            helperText: 'A complete, valid email e.g. joe@gmail.com',
+            errorText: state.email.invalid
+                ? 'Please ensure the email entered is valid'
+                : null,
+          ),
+          keyboardType: TextInputType.emailAddress,
+          onChanged: (value) {
+            context.read<MyFormBloc>().add(EmailChanged(email: value));
+          },
+          textInputAction: TextInputAction.next,
+        );
+      },
+    );
+  }
+}
+
+class PasswordInput extends StatelessWidget {
+  const PasswordInput({Key key, this.focusNode}) : super(key: key);
+
+  final FocusNode focusNode;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<MyFormBloc, MyFormState>(
+      builder: (context, state) {
+        return TextFormField(
+          initialValue: state.password.value,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+            icon: const Icon(Icons.lock),
+            helperText:
+                '''Password should be at least 8 characters with at least one letter and number''',
+            helperMaxLines: 2,
+            labelText: 'Password',
+            errorMaxLines: 2,
+            errorText: state.password.invalid
+                ? '''Password must be at least 8 characters and contain at least one letter and number'''
+                : null,
+          ),
+          obscureText: true,
+          onChanged: (value) {
+            context.read<MyFormBloc>().add(PasswordChanged(password: value));
+          },
+          textInputAction: TextInputAction.done,
+        );
+      },
+    );
+  }
+}
+
+class SuccessDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                const Icon(Icons.info),
+                const Flexible(
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Text(
+                      'Form Submitted Successfully!',
+                      softWrap: true,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            RaisedButton(
+              child: const Text('OK'),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0)),
+              onPressed: () => Navigator.of(context).pushNamed(
+                '/home',
+              ),
+            ),
+          ],
         ),
       ),
     );
